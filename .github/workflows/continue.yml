@@ -860,7 +860,7 @@ jobs:
               '<img src="https://raw.githubusercontent.com/aaronpeikert/repro-collab/main/assets/data_PR.gif" alt="Upload data files GIF">',
               '',
               '### Step 4: Close this issue',
-              'Once both have uploaded at least two data files each (minimum 4 files total), return to ' + preregistrationUrl + ' and comment `/done 9` to continue.',
+              'Once both have uploaded the data file (2 files total), return to ' + preregistrationUrl + ' and comment `/done 9` to continue.',
               ''
             ].join('\n')
             });
