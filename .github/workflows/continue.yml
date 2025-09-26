@@ -297,7 +297,7 @@ jobs:
             const milestone4BodyLines = [
               '🎉 Milestone 4 complete - "Open a issue"!',
               '',
-              `**Task:** Milestone 5 - 🟢 Easy is now available, go back to the issue you just solved, read the new comment, and close the issue: ${firstIssueUrl}`,
+              `**Task:** Milestone 5 - 🟢 Easy is now available, go back to the issue you just solved (there are two issues in your fork, which of those tasks have you just resolved?), read the new comment, and close the issue: ${firstIssueUrl}`,
               '',
               'Click the "Close issue" button.',
               '',
@@ -342,6 +342,7 @@ jobs:
           github-token: ${{ secrets.GH_PAT_CROSSREPO }}
           script: |
             const [forkOwner, forkRepo] = process.env.FORK_REPO.split('/');
+            const targetprereg = 'preregistration needed';
 
             // 1) First verify the "Create your own first issue" is closed
             const { data: issues } = await github.rest.issues.listForRepo({
@@ -351,17 +352,49 @@ jobs:
               i.title.toLowerCase() === 'create your own first issue'
             );
 
+            // 2) Try exact match
+            let foundprereg = issues.find(i => i.title.toLowerCase() === targetprereg);
+
+            // 3) If no exact, run Levenshtein ≤3
+            if (!foundprereg) {
+              const lev = (a, b) => {
+                const dp = Array.from({ length: a.length + 1 }, () => []);
+                for (let i = 0; i <= a.length; i++) dp[i][0] = i;
+                for (let j = 0; j <= b.length; j++) dp[0][j] = j;
+                for (let i = 1; i <= a.length; i++) {
+                  for (let j = 1; j <= b.length; j++) {
+                    dp[i][j] = a[i-1] === b[j-1]
+                      ? dp[i-1][j-1]
+                      : 1 + Math.min(dp[i-1][j], dp[i][j-1], dp[i-1][j-1]);
+                  }
+                }
+                return dp[a.length][b.length];
+              };
+              // Fixed: using 'issues' and 'targetprereg' instead of 'recent' and 'target'
+              foundprereg = issues.find(i => lev(i.title.toLowerCase(), targetprereg) <= 3);
+            }
+
             if (!intro || intro.state !== 'closed') {
               const url = intro
                 ? intro.html_url
                 : `https://github.com/${forkOwner}/${forkRepo}/issues`;
-              await github.rest.issues.createComment({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                issue_number: context.issue.number,
-                body: `🚫 Milestone 5 not complete. Please close ["Create your own first issue"](${url}) in your fork, then run \`/done 5\` again.`
-              });
-              return; // Exit early
+              if (foundprereg && foundprereg.state !== 'open') {
+                await github.rest.issues.createComment({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: context.issue.number,
+                  body: `🚫 Milestone 5 not complete. You have instead closed "preregistration needed" but this task is not done yet, please reopen it and close ["Create your own first issue"](${url}) in your fork, then run \`/done 5\` again.`
+                });
+                return; // Exit early
+              } else {
+                await github.rest.issues.createComment({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: context.issue.number,
+                  body: `🚫 Milestone 5 not complete. Please close ["Create your own first issue"](${url}) in your fork, then run \`/done 5\` again.`
+                });
+                return; // Exit early
+              }
             }
 
             // 2) Extract the fork SHA from the issue body
