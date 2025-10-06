@@ -863,7 +863,7 @@ jobs:
               '',
               '**Option 2: Person A works via branch and Pull Request (hard)**',
               '1. Person A makes changes on their branch.',
-              '2. Person A creates a pull request after uploading data. [Pull requests → New pull request.](https://github.com/${owner}/${repo}/pulls). Select as base repository person B's repo.',
+              `2. Person A creates a pull request after uploading data. [Pull requests → New pull request.](https://github.com/${owner}/${repo}/pulls). Select as base repository person B's repo.`,
               '3. Person B reviews and merges the pull request.',
               '',
               '### Step 3: Both Upload Your Data Files',
@@ -890,7 +890,7 @@ jobs:
               '<img src="https://raw.githubusercontent.com/aaronpeikert/repro-collab/main/assets/data_PR.gif" alt="Upload data files GIF">',
               '',
               '### Step 4: Close this issue',
-              'Once both have uploaded the data file (2 files total), Person B returns to ' + preregistrationUrl + ' and comment `/done 9` to continue.',
+              `Once both have uploaded the data file (2 files total), Person B returns to ${preregistrationUrl} and comment \`/done 9\` to continue.`,
               ''
             ].join('\n')
             });
@@ -1183,7 +1183,7 @@ jobs:
               '* Use issues to **assign tasks**.', 
               `1. [Decide on meta-comment](${issue1.data.html_url})`,
               `2. [Update number of participants](${issue2.data.html_url})`,
-              `3. [Correct materials\' description](${issue3.data.html_url})`,
+              `3. [Correct materials' description](${issue3.data.html_url})`,
               `4. [Clarify procedure](${issue4.data.html_url})`,
               `5. [Improve data analysis plan](${issue5.data.html_url})`,
               '* Work individually in your **own branch or fork**.', 
@@ -1217,7 +1217,7 @@ jobs:
               body: [
                 `⚠️ **Workflow Error - Milestone ${milestone}**`,
                 '',
-                'Something went wrong on our side while processing your `/done ${milestone}` command.',
+                `Something went wrong on our side while processing your \`/done ${milestone}\` command.`,
                 'This is likely a technical issue with our automation system.',
                 '',
                 '**What to do:**',
