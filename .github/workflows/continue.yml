@@ -297,7 +297,7 @@ jobs:
             const milestone4BodyLines = [
               '🎉 Milestone 4 complete - "Open a issue"!',
               '',
-              `**Task:** Milestone 5 - 🟢 Easy is now available, go back to the issue you just solved, read the new comment, and close the issue: ${firstIssueUrl}`,
+              `**Task:** Milestone 5 - 🟢 Easy is now available, go back to the issue you just solved (there are two issues in your fork, which of those tasks have you just resolved?), read the new comment, and close the issue: ${firstIssueUrl}`,
               '',
               'Click the "Close issue" button.',
               '',
@@ -342,6 +342,7 @@ jobs:
           github-token: ${{ secrets.GH_PAT_CROSSREPO }}
           script: |
             const [forkOwner, forkRepo] = process.env.FORK_REPO.split('/');
+            const targetprereg = 'preregistration needed';
 
             // 1) First verify the "Create your own first issue" is closed
             const { data: issues } = await github.rest.issues.listForRepo({
@@ -351,17 +352,49 @@ jobs:
               i.title.toLowerCase() === 'create your own first issue'
             );
 
+            // 2) Try exact match
+            let foundprereg = issues.find(i => i.title.toLowerCase() === targetprereg);
+
+            // 3) If no exact, run Levenshtein ≤3
+            if (!foundprereg) {
+              const lev = (a, b) => {
+                const dp = Array.from({ length: a.length + 1 }, () => []);
+                for (let i = 0; i <= a.length; i++) dp[i][0] = i;
+                for (let j = 0; j <= b.length; j++) dp[0][j] = j;
+                for (let i = 1; i <= a.length; i++) {
+                  for (let j = 1; j <= b.length; j++) {
+                    dp[i][j] = a[i-1] === b[j-1]
+                      ? dp[i-1][j-1]
+                      : 1 + Math.min(dp[i-1][j], dp[i][j-1], dp[i-1][j-1]);
+                  }
+                }
+                return dp[a.length][b.length];
+              };
+              // Fixed: using 'issues' and 'targetprereg' instead of 'recent' and 'target'
+              foundprereg = issues.find(i => lev(i.title.toLowerCase(), targetprereg) <= 3);
+            }
+
             if (!intro || intro.state !== 'closed') {
               const url = intro
                 ? intro.html_url
                 : `https://github.com/${forkOwner}/${forkRepo}/issues`;
-              await github.rest.issues.createComment({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                issue_number: context.issue.number,
-                body: `🚫 Milestone 5 not complete. Please close ["Create your own first issue"](${url}) in your fork, then run \`/done 5\` again.`
-              });
-              return; // Exit early
+              if (foundprereg && foundprereg.state !== 'open') {
+                await github.rest.issues.createComment({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: context.issue.number,
+                  body: `🚫 Milestone 5 not complete. You have instead closed "preregistration needed" but this task is not done yet, please reopen it and close ["Create your own first issue"](${url}) in your fork, then run \`/done 5\` again.`
+                });
+                return; // Exit early
+              } else {
+                await github.rest.issues.createComment({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: context.issue.number,
+                  body: `🚫 Milestone 5 not complete. Please close ["Create your own first issue"](${url}) in your fork, then run \`/done 5\` again.`
+                });
+                return; // Exit early
+              }
             }
 
             // 2) Extract the fork SHA from the issue body
@@ -803,9 +836,11 @@ jobs:
             body: [
               '## Collaborative Task: Generate and add data',
               '',
-              '**Before starting, decide between yourselves:**',
+              'Before starting, decide between yourselves:',
               '- **Person A:** The **more** experienced',
               '- **Person B:** The **less** experienced',
+              '',
+              '*Important:* From now on, only Person B can respond with `/done NUMBER`.',
               '',
               '### Step 1: Both Generate Data',
               `Both of you should visit [experiment](https://${context.repo.owner}.github.io/${context.repo.repo}/steven) and **each generate at least 20 trials independently**.`,
@@ -827,18 +862,13 @@ jobs:
               '6. Once accepted, both can directly push changes to the repository.',
               '',
               '**Option 2: Person A works via branch and Pull Request (hard)**',
-              '1. Person A creates a new branch from main:',
-              '   - Click on the branch dropdown (shows "main")',
-              '   - Type a new branch name (e.g., `add_data_[your_name]`)',
-              '   - Click "Create branch"',
-              '2. Person A makes changes on their branch.',
-              '3. Person A creates a pull request after uploading data.',
-              '4. Person B reviews and merges the pull request.',
+              '1. Person A makes changes on their branch.',
+              `2. Person A creates a pull request after uploading data. [Pull requests → New pull request.](https://github.com/${owner}/${repo}/pulls). Select as base repository person B's repo.`,
+              '3. Person B reviews and merges the pull request.',
               '',
               '### Step 3: Both Upload Your Data Files',
               '',
               '**Each person uploads their own generated data to the `data` folder.**',
-              '',
               '',
               '**Option 1: Drag & Drop (easy)**',
               '1. Navigate to the repository.',
@@ -860,7 +890,7 @@ jobs:
               '<img src="https://raw.githubusercontent.com/aaronpeikert/repro-collab/main/assets/data_PR.gif" alt="Upload data files GIF">',
               '',
               '### Step 4: Close this issue',
-              'Once both have uploaded the data file (2 files total), return to ' + preregistrationUrl + ' and comment `/done 9` to continue.',
+              `Once both have uploaded the data file (2 files total), Person B returns to ${preregistrationUrl} and comment \`/done 9\` to continue.`,
               ''
             ].join('\n')
             });
@@ -979,7 +1009,7 @@ jobs:
                   owner: context.repo.owner,
                   repo: context.repo.repo,
                   issue_number: context.issue.number,
-                  body: `🚫 Milestone 9 not complete. Found ${validCommitAuthors.length} partner(s) with commits: ${validCommitAuthors.join(', ')}. Both partners need to make commits (upload files, edit files, etc.). Then run \`/done 9\` again.`
+                  body: `🚫 Milestone 9 not complete. Found ${validCommitAuthors.length} partner(s) with commits: ${validCommitAuthors.join(', ')}. Both partners need to make commits (upload files, edit files, etc.). Then run \`/done 9\` again. Note this check will fail for person A unless you choose to merge back all changes from person B.`
                 });
                 return;
               }
@@ -1153,7 +1183,7 @@ jobs:
               '* Use issues to **assign tasks**.', 
               `1. [Decide on meta-comment](${issue1.data.html_url})`,
               `2. [Update number of participants](${issue2.data.html_url})`,
-              `3. [Correct materials\' description](${issue3.data.html_url})`,
+              `3. [Correct materials' description](${issue3.data.html_url})`,
               `4. [Clarify procedure](${issue4.data.html_url})`,
               `5. [Improve data analysis plan](${issue5.data.html_url})`,
               '* Work individually in your **own branch or fork**.', 
@@ -1170,4 +1200,30 @@ jobs:
               repo: context.repo.repo,
               issue_number: context.issue.number,
               body: completionBodyLines.join('\n')
+            });
+
+      # Failure notification step - only triggers if milestone verification steps fail
+      - name: Notify on failure
+        if: failure() && steps.parse.outputs.result != '-1' && steps.parse.outputs.result != ''
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GH_PAT_CROSSREPO }}
+          script: |
+            const milestone = '${{ steps.parse.outputs.result }}';
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body: [
+                `⚠️ **Workflow Error - Milestone ${milestone}**`,
+                '',
+                `Something went wrong on our side while processing your \`/done ${milestone}\` command.`,
+                'This is likely a technical issue with our automation system.',
+                '',
+                '**What to do:**',
+                '- Get the attention of one of the workshop organizers so that they can look into it.',
+                '- Give us the issue number of the tracking issue or/and your username.',
+                '',
+                '*This is an automated error notification.*'
+              ].join('\n')
             });
