@@ -1009,7 +1009,7 @@ jobs:
                   owner: context.repo.owner,
                   repo: context.repo.repo,
                   issue_number: context.issue.number,
-                  body: `🚫 Milestone 9 not complete. Found ${validCommitAuthors.length} partner(s) with commits: ${validCommitAuthors.join(', ')}. Both partners need to make commits (upload files, edit files, etc.). Then run \`/done 9\` again. Not this check will fail for person A unless you choose to merge back all changes from person B.`
+                  body: `🚫 Milestone 9 not complete. Found ${validCommitAuthors.length} partner(s) with commits: ${validCommitAuthors.join(', ')}. Both partners need to make commits (upload files, edit files, etc.). Then run \`/done 9\` again. Note this check will fail for person A unless you choose to merge back all changes from person B.`
                 });
                 return;
               }
@@ -1214,7 +1214,7 @@ jobs:
               owner: context.repo.owner,
               repo: context.repo.repo,
               issue_number: context.issue.number,
-                            body: [
+              body: [
                 `⚠️ **Workflow Error - Milestone ${milestone}**`,
                 '',
                 'Something went wrong on our side while processing your `/done ${milestone}` command.',
