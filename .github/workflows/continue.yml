@@ -14,7 +14,6 @@ jobs:
     if: ${{ startsWith(github.event.comment.body, '/done ') && contains(github.event.issue.labels.*.name, 'newfork') }}
     runs-on: ubuntu-latest
     steps:
-      # 0) Extract FORK_REPO from issue body
       - name: Extract FORK from issue body
         id: vars
         env:
@@ -24,8 +23,11 @@ jobs:
             | grep -oP 'Fork repo: `\K[^`]+')"
           echo "Extracted fork repo: $FORK_REPO"
           echo "fork_repo=$FORK_REPO" >> "$GITHUB_OUTPUT"
-
-      # 1) Parse the `/done N` command
+      - uses: actions/checkout@v5
+        with:
+          sparse-checkout: |
+            .github/scripts
+          sparse-checkout-cone-mode: false
       - name: Parse slash-command
         id: parse
         uses: actions/github-script@v7
