@@ -119,6 +119,8 @@ jobs:
       - name: Notify on failure
         if: failure() && steps.parse.outputs.result != '-1' && steps.parse.outputs.result != ''
         uses: actions/github-script@v7
+        env:
+          MILESTONE: ${{ steps.parse.outputs.result }}
         with:
           github-token: ${{ secrets.GH_PAT_CROSSREPO }}
           script: |
