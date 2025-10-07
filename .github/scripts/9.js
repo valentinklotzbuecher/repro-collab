@@ -255,7 +255,7 @@ module.exports = async function ({ github, context, core, env }) {
         '',
         'You may have seen this interface already, however, we can go even further and enable not only editing but also code execution in the cloud.',
         '',
-        'In the lower left corner click on `GitHub` then `Create New Code Space` then `<your-fork-name>` then `main` and then `2 cores, 8GB RAM, 32GB storage` (but it doesn\'t matter). ',
+        'In the lower left corner click on `GitHub` then `Create New Code Space` then `<your-fork-name>` then `main` and then `2 cores, 8GB RAM, 32GB storage` (but it doesn\'t matter). Do not worry about the "paid for ..." part you have at least 120h (Okt 2025) for free.',
         '',
         'Now you can open a terminal and actually run code which will be handy for some of the other milestones here. To run R code you would need to install R first (which is possible but not quite accessible enough for this workshop.)',
         'Try typing `git status` in the terminal.',
