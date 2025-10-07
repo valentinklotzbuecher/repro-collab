@@ -2,7 +2,6 @@ module.exports = async function ({ github, context, core, env }) {
     const { getOctokit, context: ghCtx } = require('@actions/github');
     const up = getOctokit(process.env.UPSTREAM_TOKEN);       // upstream client
     const x  = getOctokit(process.env.CROSSREPO_TOKEN);      // cross-repo/fork client
-    const core = require('@actions/core');
     
     const ctx = ghCtx; // alias
     
