@@ -62,8 +62,10 @@ module.exports = async function ({ github, context, core, env }) {
     const mainSha = mainRef.object.sha;
     
     await up.rest.git.createRef({
-        owner: context.repo.owner, repo: context.repo.repo,
-        ref: `refs/heads/${branchName}`, sha: mainSha
+        owner: context.repo.owner,
+        repo: context.repo.repo,
+        ref: `refs/heads/${branchName}`,
+        sha: forkSha
     });
     
     const { data: preregDraft } = await up.rest.repos.getContent({
