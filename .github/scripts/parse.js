@@ -1,5 +1,5 @@
 // .github/scripts/parseSlashCommand.js
-module.exports = async function ({ github, context, core }) {
+module.exports = async function ({ github, context, core, env }) {
   // 1) Grab body and regex all numbered tasks
   const body = context.payload.issue.body || '';
   const taskRe = /^\s*-\s*\[[ x]\]\s*(\d+)\./gm;
