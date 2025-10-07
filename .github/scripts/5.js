@@ -2,7 +2,6 @@ module.exports = async function ({ github, context, core, env }) {
     const UpOctokit = github.constructor;
     const up = new UpOctokit({ auth: env.UPSTREAM_TOKEN });     // upstream PAT
     const x  = new UpOctokit({ auth: env.CROSSREPO_TOKEN });    // cross-repo PAT
-    const ctx = ghCtx; // alias
     
     const [forkOwner, forkRepo] = (process.env.FORK_REPO || '').split('/');
     if (!forkOwner || !forkRepo) {
@@ -42,33 +41,33 @@ module.exports = async function ({ github, context, core, env }) {
         : `🚫 Milestone 5 not complete. Please close ["Create your own first issue"](${url}) in your fork, then run \`/done 5\` again.`;
         
         await x.rest.issues.createComment({
-            owner: ctx.repo.owner, repo: ctx.repo.repo, issue_number: ctx.issue.number, body: msg
+            owner: context.repo.owner, repo: context.repo.repo, issue_number: context.issue.number, body: msg
         });
         return; // stop here
     }
     
     // ------- 5.2 Prepare data for branch creation in upstream
-    const issueBody = ctx.payload.issue.body || '';
+    const issueBody = context.payload.issue.body || '';
     const shaMatch = issueBody.match(/Fork sha:\s*`([a-f0-9]{40})`/);
     if (!shaMatch) throw new Error('Could not find fork SHA in issue body');
     const forkSha = shaMatch[1]; // (You read it; below we start from main, as in your original)
     
     const timestamp  = Date.now();
-    const branchName = `preregistration/pr-${ctx.actor}-${timestamp}`;
+    const branchName = `preregistration/pr-${context.actor}-${timestamp}`;
     
     // ------- 5.3 Create branch and commit in upstream (using UPSTREAM token)
     const { data: mainRef } = await up.rest.git.getRef({
-        owner: ctx.repo.owner, repo: ctx.repo.repo, ref: 'heads/main'
+        owner: context.repo.owner, repo: context.repo.repo, ref: 'heads/main'
     });
     const mainSha = mainRef.object.sha;
     
     await up.rest.git.createRef({
-        owner: ctx.repo.owner, repo: ctx.repo.repo,
+        owner: context.repo.owner, repo: context.repo.repo,
         ref: `refs/heads/${branchName}`, sha: mainSha
     });
     
     const { data: preregDraft } = await up.rest.repos.getContent({
-        owner: ctx.repo.owner, repo: ctx.repo.repo, path: 'prereg_draft.md'
+        owner: context.repo.owner, repo: context.repo.repo, path: 'prereg_draft.md'
     });
     const preregistrationContent = Buffer.from(preregDraft.content, 'base64').toString();
     
@@ -76,14 +75,14 @@ module.exports = async function ({ github, context, core, env }) {
     let fileSha = null;
     try {
         const { data: file } = await up.rest.repos.getContent({
-            owner: ctx.repo.owner, repo: ctx.repo.repo, path: 'preregistration.md', ref: branchName
+            owner: context.repo.owner, repo: context.repo.repo, path: 'preregistration.md', ref: branchName
         });
         fileSha = file.sha;
     } catch (e) { /* not existing is fine */ }
     
     await up.rest.repos.createOrUpdateFileContents({
-        owner: ctx.repo.owner, repo: ctx.repo.repo, path: 'preregistration.md',
-        message: `Update preregistration for ${ctx.actor}`,
+        owner: context.repo.owner, repo: context.repo.repo, path: 'preregistration.md',
+        message: `Update preregistration for ${context.actor}`,
         content: Buffer.from(preregistrationContent).toString('base64'),
         branch: branchName, sha: fileSha
     });
@@ -131,7 +130,7 @@ module.exports = async function ({ github, context, core, env }) {
         '',
         '**Note**: If you are not completely sure how to do it, please refer to the GIF at the end of this comment.',
         '',
-        `**Afterwards:** Once you've suggested your change, return to ${ctx.payload.issue.html_url} and comment /done 6 to continue`,
+        `**Afterwards:** Once you've suggested your change, return to ${context.payload.issue.html_url} and comment /done 6 to continue`,
         '',
         '<img src="https://raw.githubusercontent.com/aaronpeikert/repro-collab/main/assets/make_suggestion.gif" alt="Make Suggestion GIF">'
     ].filter(Boolean);
@@ -140,7 +139,7 @@ module.exports = async function ({ github, context, core, env }) {
         owner: forkOwner,
         repo: forkRepo,
         title: 'Review this preregistration update',
-        head: `${ctx.repo.owner}:${branchName}`,  // upstream:branch -> fork:base
+        head: `${context.repo.owner}:${branchName}`,  // upstream:branch -> fork:base
         base: forkDefaultBranch,
         body: prBodyLines.join('\n'),
         maintainer_can_modify: true
@@ -148,12 +147,12 @@ module.exports = async function ({ github, context, core, env }) {
     
     // ------- 5.5 Update upstream issue checklist & comment (either client works; use x)
     const updatedBody5 =
-    (ctx.payload.issue.body || '')
+    (context.payload.issue.body || '')
     .replace(/^(\s*-\s*\[)\s\](\s*5\..*)$/m, '$1x]$2')
     + '\n- [ ] 6. Add a suggestion to the PR - 🟡 Medium';
     
     await x.rest.issues.update({
-        owner: ctx.repo.owner, repo: ctx.repo.repo, issue_number: ctx.issue.number,
+        owner: context.repo.owner, repo: context.repo.repo, issue_number: context.issue.number,
         body: updatedBody5, state: 'open'
     });
     
@@ -168,7 +167,7 @@ module.exports = async function ({ github, context, core, env }) {
     ];
     
     await x.rest.issues.createComment({
-        owner: ctx.repo.owner, repo: ctx.repo.repo, issue_number: ctx.issue.number,
+        owner: context.repo.owner, repo: context.repo.repo, issue_number: context.issue.number,
         body: milestone5BodyLines.join('\n')
     });
 }
