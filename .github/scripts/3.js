@@ -18,8 +18,6 @@ module.exports = async function ({ github, context, core, env }) {
         .replace(/^(\s*-\s*\[)\s\](\s*3\..*)$/m, '$1x]$2')
         .replace(/\n*<img[^>]*>.*$/m, '\n- [ ] 4. Create an issue - 🟢 Easy');
         
-        //.replace(/\n*<img[^>]*>.*$/m, `\n- [ ] 4. Create an issue\n\n<img src="https://${context.repo.owner}.github.io/${context.repo.repo}/assets/create_issue.gif" alt="Create Issue GIF">`);
-        
         await github.rest.issues.update({
             owner: context.repo.owner,
             repo:  context.repo.repo,
