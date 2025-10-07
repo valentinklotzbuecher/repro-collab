@@ -1,4 +1,5 @@
-// .github/scripts/parseSlashCommand.js
+// .github/scripts/parse.js
+
 module.exports = async function ({ github, context, core, env }) {
   // 1) Grab body and regex all numbered tasks
   const body = context.payload.issue.body || '';

@@ -1,3 +1,5 @@
+// .github/scripts/3.js
+
 module.exports = async function ({ github, context, core, env }) {
     const [owner, repo] = process.env.FORK_REPO.split('/');
     const { data } = await github.rest.repos.get({ owner, repo });
