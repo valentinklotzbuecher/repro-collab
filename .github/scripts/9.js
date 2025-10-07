@@ -122,7 +122,7 @@ module.exports = async function ({ github, context, core, env }) {
             owner: context.repo.owner,
             repo: context.repo.repo,
             issue_number: context.issue.number,
-            body: '🚫 Milestone 9 not complete. Create a "data" folder and upload at least 2 data files from the Shiny app. Then run `/done 9` again.'
+            body: '🚫 Milestone 9 not complete. Create a "data" folder and upload at least 2 data files from the Shiny app from two different people. Then run `/done 9` again.'
         });
         return;
     }
@@ -130,7 +130,7 @@ module.exports = async function ({ github, context, core, env }) {
     // ✅ Milestone 9 successful - now automatically trigger Milestone 10
     
     const preregistrationUrl = context.payload.issue.html_url;
-    
+    // the titles are used in check 10!!!
     // Create three collaboration issues in the fork
     const issue1 = await github.rest.issues.create({
         owner, repo,
@@ -196,7 +196,8 @@ module.exports = async function ({ github, context, core, env }) {
     // Update main issue - mark both 9 and 10 complete
     const updatedBody = context.payload.issue.body
     .replace(/^(\s*-\s*\[)\s\](\s*9\..*)$/m, '$1x]$2')
-    + '\n- [ ] 10. Collaborate on issues';
+    + '\n- [ ] 10. Collaborate on issues  - 🔴 Hard' + 
+    ' \n- [ ] 11. Learn about GitHub Codespaces - 🟡 Medium';
     
     await github.rest.issues.update({
         owner: context.repo.owner,
@@ -238,5 +239,37 @@ module.exports = async function ({ github, context, core, env }) {
         repo: context.repo.repo,
         issue_number: context.issue.number,
         body: completionBodyLines.join('\n')
+    });
+
+    const body11 = [
+        '**Task**: Execute code in the cloud',
+        '',
+        'You may have noticed that we have avoided using local software to edit files or interact with Git (spoiler: this will be part of a longer workshop).',
+        'Still, there is something almost as good, an IDE/VS Code in the browser.',
+        'To enable that either:',
+        '* type `.` (literal dot on your keyboard) while you in the code or PR view',
+        '* replace `github.com` with `github.dev` in the URL',
+        `* https://github.dev/${owner}/${repo}/`,
+        '',
+        `<img src="https://${context.repo.owner}.github.io/${context.repo.repo}/assets/web_VS.gif" alt="VS_Web">`,
+        '',
+        'You may have seen this interface already, however, we can go even further and enable not only editing but also code execution in the cloud.',
+        '',
+        'In the lower left corner click on `GitHub` then `Create New Code Space` then `<your-fork-name>` then `main` and then `2 cores, 8GB RAM, 32GB storage` (but it doesn\'t matter). ',
+        '',
+        'Now you can open a terminal and actually run code which will be handy for some of the other milestones here. To run R code you would need to install R first (which is possible but not quite accessible enough for this workshop.)',
+        'Try typing `git status` in the terminal.',
+        '',
+        'Another cool (and fully optional feature) is "Live sharing". Let\'s try it out.',
+        'In the left icon line there is a button "Extentions" (the four blocks). Click on it and search for "Live Share". Install the extention from the author "Microsoft".',
+        'Now, a new symbol appeared in the left icon line (the arrow). Click on it and start a live sharing session! One user shares their session, the other joins. This way you can code live together. However, remember it is basically as if you are sitting at the same computer so all git actions etc. will be on behalf of whoever shares their session.'
+    ]
+    
+
+    await github.rest.issues.createComment({
+        owner: context.repo.owner,
+        repo: context.repo.repo,
+        issue_number: context.issue.number,
+        body: body11.join('\n')
     });
 }
