@@ -42,7 +42,10 @@ jobs:
             }
             if (nums.length === 0) return '-1';
 
-            // 2) Parse the /done M command
+            // 2) Determine max number from the list
+            const max = Math.max(...nums);
+            
+            // 3) Parse the /done M command
             const cmd = context.payload.comment.body.trim();
             const cm = /^\/done\s+(\d+)/.exec(cmd);
             if (!cm) return '-1';
