@@ -1128,7 +1128,7 @@ jobs:
             // Update main issue - mark both 9 and 10 complete
             const updatedBody = context.payload.issue.body
               .replace(/^(\s*-\s*\[)\s\](\s*9\..*)$/m, '$1x]$2')
-              + '\n- [x] 10. Collaborate on issues';
+              + '\n- [ ] 10. Collaborate on issues';
             
             await github.rest.issues.update({
               owner: context.repo.owner,
@@ -1142,43 +1142,16 @@ jobs:
             const completionBodyLines = [
               '**Great job on completing milestone 9** 🎉',
               '',
-              'You\'ve now reached the final task of the workshop: collaboratively revising your preregistration. This is where you bring together everything you\'ve learned.', 
-              'To help you get started, we\'ve created a set of issues that outline specific improvements to make. Use these issues to assign tasks and coordinate your work.', 
+              'With milestone 9 you have completed the basic training.',
+              'Milestone 10 encourages you to simply try out more messy, less structured collaboration with your partner by revising the preregistration. This is where you bring together everything you\'ve learned.', 
+              'To help you get started, we\'ve created a set of issues that outline specific improvements to make. Use these issues to assign tasks and coordinate your work.',
               '',
-              '💻 **One more way to edit files**',
-              'You may have noticed that we have avoided using local software to edit files or interact with Git (spoiler: this will be part of a longer workshop).',
-              'Still, there is something almost as good, an IDE/VS Code in the browser.',
-              'To enable that either:',
-              '* type `.` (literal dot on your keyboard) while you in the code or PR view',
-              '* replace `github.com` with `github.dev` in the URL',
-              `* https://github.dev/${owner}/${repo}/`,
+              'However, there is so much to learn! From here on, you can choose to work on a number of milestones, in **whatever order** you want.',
+              'So you could do `/done 14` and then `/done 10` if you wanted.',
+              'Simply pick milestones that teach some skills you find useful. Everything >10 are delightfull side quests.',
               '',
-              `<img src="https://${context.repo.owner}.github.io/${context.repo.repo}/assets/web_VS.gif" alt="VS_Web">`,
+              '**Can you solve all sidequests (milestones >10) before finishing 10?**',
               '',
-              '👥 **How to collaborate**', 
-              'You already explored different collaboration setups in milestone 9. For this task:', 
-              '* If you\'re both working in the same repository, each of you should work in a separate branch within that repository.', 
-              '* If you\'re working in separate forks, the less experienced partner (who owns the main project repository) should also create a new branch in their fork. This allows them to open a PR to suggest changes to the main branch of their own project.',
-              '* In any case, ideally you have a branch for each "seperate" issue. That way changes can be reviewed and incorporated on their own.',
-              'Once you\'ve completed a meaningful chunk of work (e.g., one or more related tasks), open a pull request (PR) so your partner can review it.', 
-              '',
-              '💡 **Tips for smooth collaboration**', 
-              '* Write **clear commit messages** so your partner knows what changed (e.g., "refine research question").', 
-              '* Keep your branch or fork up-to-date with the main branch before opening a PR.', 
-              '  - [How to sync your fork](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/working-with-forks/syncing-a-fork)', 
-              '  - [How to sync your branch](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/keeping-your-pull-request-in-sync-with-the-base-branch)', 
-              '* **Smaller PRs** (e.g., with fewer commits) are easier to review, discuss and merge. To create small PRs, you have to create more branches.',
-              '* **More lines** Git compares things *per line*, so making a habit of putting, e.g. each sentence on their own line in markdown, or breaking down code into multiple lines helps create clean PRs.', 
-              '* **Mention your partner** in the PR (@username) or by assigning them as a reviewer.', 
-              '',
-              '⚔️ **What if there\'s a merge conflict?**', 
-              'Merge conflicts happen when both of you change the same part of a file and GitHub doesn’t know which version to keep.', 
-              'To prevent merge conflicts:', 
-              '* Sync your fork or branch before making changes.', 
-              '* Communicate about who is editing what.', 
-              'If a conflict does happen, GitHub will show you what needs to be resolved, and you\'ll need to choose which parts to keep.', 
-              '[About merge conflicts](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/addressing-merge-conflicts/about-merge-conflicts)', 
-              '', 
               '**Task**: Revise the preregistration together', 
               '* Use issues to **assign tasks**.', 
               `1. [Decide on meta-comment](${issue1.data.html_url})`,
@@ -1190,9 +1163,6 @@ jobs:
               '* **Create PRs** when you\'re ready for feedback.', 
               '* Use PRs to **discuss and improve** the changes.', 
               '* **Close issues** once tasks are complete.', 
-              '', 
-              '**Afterwards**: This is the final task of the workshop, so there are no more `/done` commands needed.', 
-              '',
             ];
             
             await github.rest.issues.createComment({
