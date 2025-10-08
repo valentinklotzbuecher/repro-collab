@@ -134,10 +134,6 @@ module.exports = async function ({ github, context, core, env }) {
     // Update main issue - mark both 9 and 10 complete
     const updatedBody = context.payload.issue.body
     .replace(/^(\s*-\s*\[)\s\](\s*9\..*)$/m, '$1x]$2')
-    + '\n- [ ] 10. Collaborate on issues  - 🔴 Hard' + 
-    '\n- [ ] 11. Learn about GitHub Codespaces - 🟡 Medium' +
-    '\n- [ ] 12. Create private and public repositories - 🟢 Easy/ 🔴 Hard' +
-    '\n- [ ] 13. Work with people who don\'t use Git/GitHub - 🟡 Medium';
     
     await github.rest.issues.update({
         owner: context.repo.owner,
