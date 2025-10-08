@@ -96,6 +96,7 @@ module.exports = async function ({ github, context, core, env }) {
         owner: owner,
         repo: repo,
         title: '[optional] Milestone 12: Create private and public repositories - 🟢 Easy/ 🔴 Hard',
-        body: body12.join('\n')
+        body: body12.join('\n'),
+        labels: ['enhancement']
     });
 }

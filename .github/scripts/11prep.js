@@ -29,6 +29,7 @@ module.exports = async function ({ github, context, core, env }) {
         owner: owner,
         repo: repo,
         title: '[optional] Milestone 11: Learn about GitHub Codespaces - 🟡 Medium',
-        body: body11.join('\n')
+        body: body11.join('\n'),
+        labels: ['enhancement']
     });
 }

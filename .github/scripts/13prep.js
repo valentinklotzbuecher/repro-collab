@@ -33,6 +33,7 @@ module.exports = async function ({ github, context, core, env }) {
         owner: owner,
         repo: repo,
         title: '[optional] Milestone 13: Work with people who don\'t use Git/GitHub',
-        body: body13.join('\n')
+        body: body13.join('\n'),
+        labels: ['enhancement']
     });
 }
