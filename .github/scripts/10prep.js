@@ -4,7 +4,7 @@ module.exports = async function ({ github, context, core, env }) {
     // Create three collaboration issues in the fork
     const issue1 = await github.rest.issues.create({
         owner, repo,
-        title: 'Decide on meta-comment',
+        title: 'Milestone 10: Decide on meta-comment',
         body: [
             '## Decide on meta-comment',
             '',
@@ -16,7 +16,7 @@ module.exports = async function ({ github, context, core, env }) {
     
     const issue2 = await github.rest.issues.create({
         owner, repo,
-        title: 'Update number of participants',
+        title: 'Milestone 10: Update number of participants',
         body: [
             '## Update number of participants',
             '',
@@ -28,7 +28,7 @@ module.exports = async function ({ github, context, core, env }) {
     
     const issue3 = await github.rest.issues.create({
         owner, repo,
-        title: 'Correct materials\' description',
+        title: 'Milestone 10: Correct materials\' description',
         body: [
             '## Correct materials\' description',
             '',
@@ -41,7 +41,7 @@ module.exports = async function ({ github, context, core, env }) {
     
     const issue4 = await github.rest.issues.create({
         owner, repo,
-        title: 'Clarify procedure',
+        title: 'Milestone 10: Clarify procedure',
         body: [
             '## Clarify procedure',
             '',
@@ -54,7 +54,7 @@ module.exports = async function ({ github, context, core, env }) {
     
     const issue5 = await github.rest.issues.create({
         owner, repo,
-        title: 'Improve data analysis plan',
+        title: 'Milestone 10: Improve data analysis plan',
         body: [
             '## Improve data analysis plan',
             '',
