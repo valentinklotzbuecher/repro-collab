@@ -1,5 +1,7 @@
 module.exports = async function ({ github, context, core, env }) {
     const [owner, repo] = process.env.FORK_REPO.split('/');
+    const trackingIssueUrl = context.payload.issue.html_url;
+
     const body11 = [
         '**Task**: Execute code in the cloud',
         '',
@@ -21,10 +23,12 @@ module.exports = async function ({ github, context, core, env }) {
         '',
         'Another cool (and fully optional feature) is "Live sharing". Let\'s try it out.',
         'In the left icon line there is a button "Extensions" (the four blocks). Click on it and search for "Live Share". Install the extension from the author "Microsoft".',
-        'Now, a new symbol appeared in the left icon line (the arrow). Click on it and start a live sharing session! One user shares their session, the other joins. This way you can code live together. However, remember it is basically as if you are sitting at the same computer so all git actions etc. will be on behalf of whoever shares their session.'
+        'Now, a new symbol appeared in the left icon line (the arrow). Click on it and start a live sharing session! One user shares their session, the other joins. This way you can code live together. However, remember it is basically as if you are sitting at the same computer so all git actions etc. will be on behalf of whoever shares their session.',
+        '',
+        `**When done:** Comment \`/done 11\` [in the tracking issue](${trackingIssueUrl})`
     ]
-    
-    
+
+
     await github.rest.issues.create({
         owner: owner,
         repo: repo,

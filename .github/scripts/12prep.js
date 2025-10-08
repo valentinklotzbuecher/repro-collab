@@ -1,5 +1,7 @@
 module.exports = async function ({ github, context, core, env }) {
     const [owner, repo] = process.env.FORK_REPO.split('/');
+    const trackingIssueUrl = context.payload.issue.html_url;
+
     const body12 = [
         '',
         '### Task: Create private repositories (🟢 Easy)',
@@ -35,7 +37,7 @@ module.exports = async function ({ github, context, core, env }) {
         '',
         '**Discussion:** When would you use private vs public repos in your research?',
         '',
-        '**When done:** Comment `/done 12` or try the hard version of this milestone.',
+        `**When done:** Comment \`/done 12\` [in the tracking issue](${trackingIssueUrl}) or try the hard version of this milestone.`,
         '',
         '### Task: Create semi-private repositories (🔴 Super Hard)',
         '',
@@ -90,6 +92,7 @@ module.exports = async function ({ github, context, core, env }) {
         'Now all the content from private is public but your PR and Issue discussion remain private. Therefore anything you want to keep private needs to remain in an Issue or PR.',
         'Importantly, if you ever commit some content in git even if you change it later, those private things can be resurfaced.',
         'One option for that is to use `git merge --squash` for the public branch/repo that hides all intermediate changes but we won\'t go into more detail. Feel free to ask, though!'
+        `**When done:** Comment \`/done 12\` [in the tracking issue](${trackingIssueUrl}).`,
     ];
     
     await github.rest.issues.create({

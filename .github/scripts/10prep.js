@@ -63,11 +63,14 @@ module.exports = async function ({ github, context, core, env }) {
         ].join('\n')
     });
 
-        // Combined success comment for both milestones
+    // Get tracking issue URL
+    const trackingIssueUrl = context.payload.issue.html_url;
+
+    // Combined success comment for both milestones
     const body10 = [
         '**Milestone 10**',
         '',
-        'Here we want you to simply try out a more messy, less structured collaboration with your partner by revising the preregistration. This is where you bring together everything you\'ve learned.', 
+        'Here we want you to simply try out a more messy, less structured collaboration with your partner by revising the preregistration. This is where you bring together everything you\'ve learned.',
         'To help you get started, we\'ve created a set of issues that outline specific improvements to make. Use these issues to assign tasks and coordinate your work.',
         '',
         'However, there is so much to learn! From here on, you can choose to work on a number of **OPTIONAL** milestones, in **whatever order** you want.',
@@ -76,19 +79,21 @@ module.exports = async function ({ github, context, core, env }) {
         '',
         '*It is unlikely that you manage to finish all sidequests in a day, they are only if you really want to dig deep.*',
         '',
-        '**Task**: Revise the preregistration together', 
-        '* Use issues to **assign tasks**.', 
+        '**Task**: Revise the preregistration together',
+        '* Use issues to **assign tasks**.',
         `1. [Decide on meta-comment](${issue1.data.html_url})`,
         `2. [Update number of participants](${issue2.data.html_url})`,
         `3. [Correct materials' description](${issue3.data.html_url})`,
         `4. [Clarify procedure](${issue4.data.html_url})`,
         `5. [Improve data analysis plan](${issue5.data.html_url})`,
-        '* Work individually in your **own branch or fork**.', 
-        '* **Create PRs** when you\'re ready for feedback.', 
-        '* Use PRs to **discuss and improve** the changes.', 
-        '* **Close issues** once tasks are complete.', 
+        '* Work individually in your **own branch or fork**.',
+        '* **Create PRs** when you\'re ready for feedback.',
+        '* Use PRs to **discuss and improve** the changes.',
+        '* **Close issues** once tasks are complete.',
+        '',
+        `**When done:** Comment \`/done 10\` [in the tracking issue](${trackingIssueUrl})`
     ];
-    
+
     await github.rest.issues.createComment({
         owner: context.repo.owner,
         repo: context.repo.repo,
