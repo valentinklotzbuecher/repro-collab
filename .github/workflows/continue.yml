@@ -37,127 +37,43 @@ jobs:
           script: |
             const run = require('./.github/scripts/parse.js');
             return await run({ github, context, core, env: process.env });
-      - name: 3
-        if: steps.parse.outputs.result == '3'
+      
+      # Run milestone validation script (3-15)
+      - name: Run milestone script
+        id: milestone
+        if: steps.parse.outputs.result >= '3'
         uses: actions/github-script@v7
         env:
           FORK_REPO: ${{ steps.vars.outputs.fork_repo }}
-        with:
-          github-token: ${{ secrets.GH_PAT_CROSSREPO }}
-          script: |
-                const run = require('./.github/scripts/3.js');
-                return await run({ github, context, core, env: process.env });
-      - name: 4
-        if: steps.parse.outputs.result == '4'
-        uses: actions/github-script@v7
-        env:
-          FORK_REPO: ${{ steps.vars.outputs.fork_repo }}
-        with:
-          github-token: ${{ secrets.GH_PAT_CROSSREPO }}
-          script: |
-            const run = require('./.github/scripts/4.js');
-            return await run({ github, context, core, env: process.env });
-      - name: 5
-        id: verify-5
-        if: steps.parse.outputs.result == '5'
-        uses: actions/github-script@v7
-        env:
-          FORK_REPO: ${{ steps.vars.outputs.fork_repo }}
+          MILESTONE: ${{ steps.parse.outputs.result }}
           UPSTREAM_TOKEN: ${{ secrets.GH_PAT_UPSTREAM }}
           CROSSREPO_TOKEN: ${{ secrets.GH_PAT_CROSSREPO }}
         with:
           github-token: ${{ secrets.GH_PAT_CROSSREPO }}
           script: |
-            const run = require('./.github/scripts/5.js');
+            const milestone = process.env.MILESTONE;
+            const scriptName = `${milestone}`;
+            console.log(`Running ${scriptName}.js...`);
+            const run = require(`./.github/scripts/${scriptName}.js`);
             return await run({ github, context, core, env: process.env });
-      - name: 6
-        if: steps.parse.outputs.result == '6'
+      
+      # After milestone 9 succeeds, prep milestones 10-13
+      - name: Prep milestones 10-13
+        if: steps.parse.outputs.result == '9' && steps.milestone.outputs.validated == 'true'
         uses: actions/github-script@v7
         env:
           FORK_REPO: ${{ steps.vars.outputs.fork_repo }}
         with:
           github-token: ${{ secrets.GH_PAT_CROSSREPO }}
           script: |
-            const run = require('./.github/scripts/6.js');
-            return await run({ github, context, core, env: process.env });
-      - name: 7
-        if: steps.parse.outputs.result == '7'
-        uses: actions/github-script@v7
-        env:
-          FORK_REPO: ${{ steps.vars.outputs.fork_repo }}
-        with:
-          github-token: ${{ secrets.GH_PAT_CROSSREPO }}
-          script: |
-            const run = require('./.github/scripts/7.js');
-            return await run({ github, context, core, env: process.env });
-
-      # Milestone 8: Build groups
-      - name: 8
-        if: steps.parse.outputs.result == '8'
-        uses: actions/github-script@v7
-        env:
-          FORK_REPO: ${{ steps.vars.outputs.fork_repo }}
-        with:
-          github-token: ${{ secrets.GH_PAT_CROSSREPO }}
-          script: |
-            const run = require('./.github/scripts/8.js');
-            return await run({ github, context, core, env: process.env });
-      - name: 9
-        id: step9
-        if: steps.parse.outputs.result == '9'
-        uses: actions/github-script@v7
-        env:
-          FORK_REPO: ${{ steps.vars.outputs.fork_repo }}
-        with:
-          github-token: ${{ secrets.GH_PAT_CROSSREPO }}
-          script: |
-            const run = require('./.github/scripts/9.js');
-            return await run({ github, context, core, env: process.env });
-      - name: Prep
-        if: steps.step9.outputs.validated == 'true'
-        uses: actions/github-script@v7
-        env:
-          FORK_REPO: ${{ steps.vars.outputs.fork_repo }}
-        with:
-          github-token: ${{ secrets.GH_PAT_CROSSREPO }}
-          script: |
-            // Run prep scripts for milestones 10-15
+            // Run prep scripts for milestones 10-13
             for (let milestone = 10; milestone <= 13; milestone++) {
               const scriptName = `${milestone}prep`;
               console.log(`Running ${scriptName}.js...`);
               const run = require(`./.github/scripts/${scriptName}.js`);
               await run({ github, context, core, env: process.env });
             }
-      - name: 10
-        if: steps.parse.outputs.result == '10'
-        uses: actions/github-script@v7
-        env:
-          FORK_REPO: ${{ steps.vars.outputs.fork_repo }}
-        with:
-          github-token: ${{ secrets.GH_PAT_CROSSREPO }}
-          script: |
-            const run = require('./.github/scripts/10.js');
-            return await run({ github, context, core, env: process.env });
-      - name: 11
-        if: steps.parse.outputs.result == '11'
-        uses: actions/github-script@v7
-        env:
-          FORK_REPO: ${{ steps.vars.outputs.fork_repo }}
-        with:
-          github-token: ${{ secrets.GH_PAT_CROSSREPO }}
-          script: |
-            const run = require('./.github/scripts/11.js');
-            return await run({ github, context, core, env: process.env });
-      - name: 12
-        if: steps.parse.outputs.result == '12'
-        uses: actions/github-script@v7
-        env:
-          FORK_REPO: ${{ steps.vars.outputs.fork_repo }}
-        with:
-          github-token: ${{ secrets.GH_PAT_CROSSREPO }}
-          script: |
-            const run = require('./.github/scripts/12.js');
-            return await run({ github, context, core, env: process.env });
+      
       # Failure notification step - only triggers if milestone verification steps fail
       - name: Notify on failure
         if: failure() && steps.parse.outputs.result != '-1' && steps.parse.outputs.result != ''
