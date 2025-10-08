@@ -38,7 +38,7 @@ jobs:
             const run = require('./.github/scripts/parse.js');
             return await run({ github, context, core, env: process.env });
       
-      # Run milestone validation script (3-15)
+      # Run milestone validation script
       - name: Run milestone script
         id: milestone
         if: steps.parse.outputs.result >= '3'
@@ -57,7 +57,6 @@ jobs:
             const run = require(`./.github/scripts/${scriptName}.js`);
             return await run({ github, context, core, env: process.env });
       
-      # After milestone 9 succeeds, prep milestones 10-13
       - name: Prep milestones 10-13
         if: steps.parse.outputs.result == '9' && steps.milestone.outputs.validated == 'true'
         uses: actions/github-script@v7
