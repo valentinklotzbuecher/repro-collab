@@ -41,7 +41,7 @@ jobs:
       # Run milestone validation script
       - name: Run milestone script
         id: milestone
-        if: steps.parse.outputs.result >= '3'
+        if: steps.parse.outputs.result != '' && steps.parse.outputs.result != '-1'
         uses: actions/github-script@v7
         env:
           FORK_REPO: ${{ steps.vars.outputs.fork_repo }}

@@ -18,12 +18,12 @@ module.exports = async function ({ github, context, core, env }) {
   const num = parseInt(cm[1], 10);
 
   // 4) Validate range
-  if (!nums.includes(num)) {
+  if (num < 3 || !nums.includes(num)) {
     await github.rest.issues.createComment({
       owner: context.repo.owner,
       repo:  context.repo.repo,
       issue_number: context.issue.number,
-      body: `🚫 Invalid milestone number. Please pick a number between 1 and ${max}.`
+      body: `🚫 Invalid milestone number. Please pick a number between 3 and ${max}.`
     });
     return '-1';
   }
