@@ -114,7 +114,36 @@ jobs:
           script: |
             const run = require('./.github/scripts/9.js');
             return await run({ github, context, core, env: process.env });
-
+      - name: 10
+        if: steps.parse.outputs.result == '10'
+        uses: actions/github-script@v7
+        env:
+          FORK_REPO: ${{ steps.vars.outputs.fork_repo }}
+        with:
+          github-token: ${{ secrets.GH_PAT_CROSSREPO }}
+          script: |
+            const run = require('./.github/scripts/10.js');
+            return await run({ github, context, core, env: process.env });
+      - name: 11
+        if: steps.parse.outputs.result == '11'
+        uses: actions/github-script@v7
+        env:
+          FORK_REPO: ${{ steps.vars.outputs.fork_repo }}
+        with:
+          github-token: ${{ secrets.GH_PAT_CROSSREPO }}
+          script: |
+            const run = require('./.github/scripts/11.js');
+            return await run({ github, context, core, env: process.env });
+      - name: 12
+        if: steps.parse.outputs.result == '12'
+        uses: actions/github-script@v7
+        env:
+          FORK_REPO: ${{ steps.vars.outputs.fork_repo }}
+        with:
+          github-token: ${{ secrets.GH_PAT_CROSSREPO }}
+          script: |
+            const run = require('./.github/scripts/12.js');
+            return await run({ github, context, core, env: process.env });
       # Failure notification step - only triggers if milestone verification steps fail
       - name: Notify on failure
         if: failure() && steps.parse.outputs.result != '-1' && steps.parse.outputs.result != ''
