@@ -220,7 +220,7 @@ module.exports = async function ({ github, context, core, env }) {
         '',
         'However, there is so much to learn! From here on, you can choose to work on a number of **OPTIONAL** milestones, in **whatever order** you want.',
         'So you could do `/done 14` and then `/done 10` if you wanted.',
-        'Simply pick milestones that teach some skills you find useful. Everything >10 are delightfull side quests.',
+        'Simply pick milestones that teach some skills you find useful. Everything >10 are delightful side quests.',
         '',
         '*It is unlikely that you manage to finish all sidequests in a day, they are only if you really want to dig deep.*',
         '',
