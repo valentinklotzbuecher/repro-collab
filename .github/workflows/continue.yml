@@ -102,9 +102,8 @@ jobs:
           script: |
             const run = require('./.github/scripts/8.js');
             return await run({ github, context, core, env: process.env });
-
-      # Milestone 9: Generate and upload data + Auto-trigger Milestone 10
       - name: 9
+        id: step9
         if: steps.parse.outputs.result == '9'
         uses: actions/github-script@v7
         env:
@@ -114,6 +113,21 @@ jobs:
           script: |
             const run = require('./.github/scripts/9.js');
             return await run({ github, context, core, env: process.env });
+      - name: Prep
+        if: steps.step9.outputs.validated == 'true'
+        uses: actions/github-script@v7
+        env:
+          FORK_REPO: ${{ steps.vars.outputs.fork_repo }}
+        with:
+          github-token: ${{ secrets.GH_PAT_CROSSREPO }}
+          script: |
+            // Run prep scripts for milestones 10-15
+            for (let milestone = 10; milestone <= 13; milestone++) {
+              const scriptName = `${milestone}prep`;
+              console.log(`Running ${scriptName}.js...`);
+              const run = require(`./.github/scripts/${scriptName}.js`);
+              await run({ github, context, core, env: process.env });
+            }
       - name: 10
         if: steps.parse.outputs.result == '10'
         uses: actions/github-script@v7
