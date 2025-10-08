@@ -214,7 +214,7 @@ module.exports = async function ({ github, context, core, env }) {
         '',
         'With milestone 9 you have completed the tutorial!',
         'You have accomplished to learn all the fundamentals we wanted you to learn.',
-        'In Milestone 10, you can test your prowes.',
+        'In Milestone 10, you can test your prowess.',
         'There, we want you to simply try out a more messy, less structured collaboration with your partner by revising the preregistration. This is where you bring together everything you\'ve learned.', 
         'To help you get started, we\'ve created a set of issues that outline specific improvements to make. Use these issues to assign tasks and coordinate your work.',
         '',
