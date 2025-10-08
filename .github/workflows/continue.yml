@@ -1202,6 +1202,283 @@ jobs:
               body: completionBodyLines.join('\n')
             });
 
+      # Milestone 10: Dummy check for transition to advanced features
+      - name: Verify milestone 10
+        if: steps.parse.outputs.result == '10'
+        uses: actions/github-script@v7
+        env:
+          FORK_REPO: ${{ steps.vars.outputs.fork_repo }}
+        with:
+          github-token: ${{ secrets.GH_PAT_CROSSREPO }}
+          script: |
+            // Dummy check and reveal
+            
+            // Update issue body - mark 10 complete and reveal 11
+            const updatedBody10 = context.payload.issue.body
+              .replace(/^(\s*-\s*\[)\s\](\s*10\..*)$/m, '$1x]$2')
+              + '\n- [ ] 11. Work with GitHub Codespaces/github.dev - 🟢 Easy';
+            
+            await github.rest.issues.update({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body: updatedBody10,
+              state: 'open'
+            });
+            
+            // Success comment with instructions for milestone 11
+            const milestone10BodyLines = [
+              '✅ **Milestone 10 complete!**',
+              '',
+              '### Task: Work with GitHub Codespaces/github.dev',
+              '',
+              '**Why this matters:**',
+              'Editing files directly on GitHub can be limiting. GitHub provides powerful browser-based development environments that give you VS Code functionality without installing anything locally.',
+              'This is especially useful for quick edits during reviews or when working from different computers.',
+              '',
+              '### Instructions:',
+              '',
+              '1. **Navigate to any file in your repository**',
+              '2. **Press `.` (dot) on your keyboard**',
+              '   - Alternative: Replace `github.com` with `github.dev` in the URL',
+              '3. **Make a small edit to any file**',
+              '4. **Commit your change using the Source Control panel**',
+              '',
+              `**When done:** Comment \`/done 11\``
+            ];
+            
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body: milestone10BodyLines.join('\n')
+            });
+
+      # Milestone 11: Work with GitHub Codespaces/github.dev
+      - name: Verify milestone 11
+        if: steps.parse.outputs.result == '11'
+        uses: actions/github-script@v7
+        env:
+          FORK_REPO: ${{ steps.vars.outputs.fork_repo }}
+        with:
+          github-token: ${{ secrets.GH_PAT_CROSSREPO }}
+          script: |
+            // Dummy Issue verification
+            const updatedBody11 = context.payload.issue.body
+              .replace(/^(\s*-\s*\[)\s\](\s*11\..*)$/m, '$1x]$2')
+              + '\n- [ ] 12. Create private and public repositories - 🟢 Easy';
+            
+            await github.rest.issues.update({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body: updatedBody11,
+              state: 'open'
+            });
+            
+            const milestone11BodyLines = [
+              '✅ **Milestone 11 complete!**',
+              '',
+              '### Task: Create private and public repositories',
+              '',
+              '**Why this matters:**',
+              'During peer review, you need transparency for reviewers while keeping internal team discussions private.',
+              'Example: Your manuscript is public for reviewers, but discussions about how to address their comments stay confidential.',
+              '',
+              '### Detailed Steps:',
+              '',
+              '**Step 1: Create a PRIVATE repository**',
+              '1. Go to [github.com](https://github.com) and click the green **"New"** button',
+              '   - Or use the **"+"** icon in the top right corner, then select "New repository"',
+              '2. Repository name: `private`',
+              '3. **Important:** Select **Private** visibility (lock icon)',
+              '4. Check the box "Add a README file"',
+              '5. Add .gitignore: Select **Python** from the dropdown menu',
+              '6. Click **"Create repository"**',
+              '',
+              '**Step 2: Create a PUBLIC repository**',
+              '1. Click the green **"New"** button again',
+              '2. Repository name: `public`',
+              '3. **Important:** Select **Public** visibility (globe icon)',
+              '4. Check the box "Add a README file"',
+              '5. Add .gitignore: Select **Python** from the dropdown menu',
+              '6. Click **"Create repository"**',
+              '',
+              '**Step 3: Test visibility with your partner**',
+              '1. Share your GitHub username with your partner',
+              '2. **Partner searches for your PUBLIC repo:**',
+              '   - Go to GitHub search bar at the top of the page',
+              '   - Type: `user:PARTNER_USERNAME public`',
+              '   - Press Enter - this PUBLIC repo should appear in results',
+              '3. **Partner searches for your PRIVATE repo:**',
+              '   - Type: `user:PARTNER_USERNAME private`',
+              '   - Press Enter - this PRIVATE repo should NOT appear',
+              '',
+              '**Expected results:**',
+              '- Public repository: visible to everyone',
+              '- Private repository: hidden from non-collaborators',
+              '',
+              '**Discussion:** When would you use private vs public repos in your research?',
+              '',
+              `**When done:** Comment \`/done 12\``
+            ];
+
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body: milestone11BodyLines.join('\n')
+            });
+
+      # Milestone 12: Create private and public repositories
+      - name: Verify milestone 12
+        if: steps.parse.outputs.result == '12'
+        uses: actions/github-script@v7
+        env:
+          FORK_REPO: ${{ steps.vars.outputs.fork_repo }}
+        with:
+          github-token: ${{ secrets.GH_PAT_CROSSREPO }}
+          script: |
+            // Mark complete without verification
+            
+            // Update issue body - mark 12 complete and reveal 13
+            const updatedBody12 = context.payload.issue.body
+              .replace(/^(\s*-\s*\[)\s\](\s*12\..*)$/m, '$1x]$2')
+              + '\n- [ ] 13. Work with private and public repositories - 🔴 Hard';
+            
+            await github.rest.issues.update({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body: updatedBody12,
+              state: 'open'
+            });
+            
+            // Success comment with instructions for milestone 13
+            const milestone12BodyLines = [
+              '✅ **Milestone 12 complete!**',
+              '',
+              '### Task: Work with both repositories',
+              '',
+              '**Scenario:**',
+              'Managing reviewer feedback professionally - keep raw discussions private, share polished responses publicly.',
+              '',
+              '### Detailed Steps:',
+              '',
+              '**Step 1: Open your PRIVATE repo in github.dev**',
+              '- Navigate to your private repository on GitHub',
+              '- Press `.` (dot key) OR change the URL from `github.com/YOU/private` to `github.dev/YOU/private`',
+              '- Wait for VS Code to load in your browser',
+              '',
+              '**Step 2: Link your public repository**',
+              '- In github.dev, open the terminal: `Terminal` → `New Terminal` (or press Ctrl+`)',
+              '- Add your public repo as a remote:',
+              '```bash',
+              'git remote add public https://github.com/YOU/public.git',
+              '```',
+              '- Verify it worked:',
+              '```bash',
+              'git remote -v',
+              '```',
+              '- You should see both "origin" (private) and "public" (public) listed',
+              '',
+              '**Step 3: Create the PRIVATE response file**',
+              '- In the file explorer (left sidebar), right-click → `New File`',
+              '- Name it: `response.md`',
+              '- Copy and paste this content with intentional errors:',
+              '```markdown',
+              '# Team Notes on Reviwer Comments',
+              'Reviewer 2 is being dificult again.',
+              'TODO: Fix metodology they complaned about',
+              '```',
+              '- Save the file: `Ctrl+S` (or `Cmd+S` on Mac)',
+              '',
+              '**Step 4: Commit and push to PRIVATE repo**',
+              '- In the terminal, run these commands one by one:',
+              '```bash',
+              'git add response.md',
+              'git commit -m "Add internal review discussion"',
+              'git push origin main',
+              '```',
+              '',
+              '**Step 5: Update file for PUBLIC version**',
+              '- Still in github.dev, open the `response.md` file',
+              '- Delete ALL content and replace with:',
+              '```markdown',
+              '# Response to Reviewers',
+              'We thank the reviewers for their constructive feedback.',
+              'The methodology section has been substantially revised.',
+              '```',
+              '- Save the file: `Ctrl+S` (or `Cmd+S` on Mac)',
+              '',
+              '**Step 6: Commit and push to PUBLIC repo**',
+              '- In the terminal, run:',
+              '```bash',
+              'git add response.md',
+              'git commit -m "Add professional reviewer response"',
+              'git push public main',
+              '```',
+              '- If prompted for credentials, follow GitHub\'s authentication instructions',
+              '',
+              '**Step 7: Verify with your partner**',
+              '- Partner searches for both your repos on GitHub',
+              '- They should only find the PUBLIC one',
+              '- Compare the `response.md` files in each repo - they should be different!',
+              '',
+              `**When done:** Comment \`/done 13\``,
+              '',
+              '<img src="https://raw.githubusercontent.com/YOUR_USERNAME/YOUR_REPO/main/assets/milestone13.gif" alt="Managing Private and Public Repos">',
+              '',
+            ];
+            
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body: milestone12BodyLines.join('\n')
+            });
+
+      # Milestone 13: Work with private and public repositories
+      - name: Verify milestone 13
+        if: steps.parse.outputs.result == '13'
+        uses: actions/github-script@v7
+        env:
+          FORK_REPO: ${{ steps.vars.outputs.fork_repo }}
+        with:
+          github-token: ${{ secrets.GH_PAT_CROSSREPO }}
+          script: |
+            // Mark complete without verification
+            
+            // Update issue body - mark 13 complete
+            const updatedBody13 = context.payload.issue.body
+              .replace(/^(\s*-\s*\[)\s\](\s*13\..*)$/m, '$1x]$2');
+            
+            await github.rest.issues.update({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body: updatedBody13,
+              state: 'open'
+            });
+            
+            // Simple completion message
+            const milestone13BodyLines = [
+              '✅ **Milestone 13 complete!**',
+              '',
+              'You now understand how to manage private/public repository workflows for professional review processes.',
+              '',
+              '**Key insight:** Separate internal discussions from public-facing content.',
+              '',
+              '// TODO: Add next milestone'
+            ];
+            
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body: milestone13BodyLines.join('\n')
+            });
+
       # Failure notification step - only triggers if milestone verification steps fail
       - name: Notify on failure
         if: failure() && steps.parse.outputs.result != '-1' && steps.parse.outputs.result != ''
