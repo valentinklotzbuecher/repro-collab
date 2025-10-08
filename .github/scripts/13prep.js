@@ -1,5 +1,7 @@
 module.exports = async function ({ github, context, core, env }) {
     const [owner, repo] = process.env.FORK_REPO.split('/');
+    const trackingIssueUrl = context.payload.issue.html_url;
+
     const body13 = [
         '',
         '### Task: Incorporate Feedback that comes in less than ideal form.',
@@ -25,7 +27,7 @@ module.exports = async function ({ github, context, core, env }) {
         '',
         '**Discussion:** When does/doesn\'t it make sense to track other people in git?',
         '',
-        '**When done:** Comment `/done 13`',
+        `**When done:** Comment \`/done 13\` [in the tracking issue](${trackingIssueUrl}).`,
         '',
     ];
     
@@ -36,4 +38,4 @@ module.exports = async function ({ github, context, core, env }) {
         body: body13.join('\n'),
         labels: ['enhancement']
     });
-}
+}        
