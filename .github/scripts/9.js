@@ -197,7 +197,8 @@ module.exports = async function ({ github, context, core, env }) {
     const updatedBody = context.payload.issue.body
     .replace(/^(\s*-\s*\[)\s\](\s*9\..*)$/m, '$1x]$2')
     + '\n- [ ] 10. Collaborate on issues  - 🔴 Hard' + 
-    ' \n- [ ] 11. Learn about GitHub Codespaces - 🟡 Medium';
+    '\n- [ ] 11. Learn about GitHub Codespaces - 🟡 Medium' +
+    '\n- [ ] 12. Create private and public repositories - 🟢 Easy/ 🔴 Hard';
     
     await github.rest.issues.update({
         owner: context.repo.owner,
@@ -211,15 +212,17 @@ module.exports = async function ({ github, context, core, env }) {
     const completionBodyLines = [
         '**Great job on completing milestone 9** 🎉',
         '',
-        'With milestone 9 you have completed the basic training.',
-        'Milestone 10 encourages you to simply try out more messy, less structured collaboration with your partner by revising the preregistration. This is where you bring together everything you\'ve learned.', 
+        'With milestone 9 you have completed the tutorial!',
+        'You have accomplished to learn all the fundamentals we wanted you to learn.',
+        'In Milestone 10, you can test your prowes.',
+        'There, we want you to simply try out a more messy, less structured collaboration with your partner by revising the preregistration. This is where you bring together everything you\'ve learned.', 
         'To help you get started, we\'ve created a set of issues that outline specific improvements to make. Use these issues to assign tasks and coordinate your work.',
         '',
-        'However, there is so much to learn! From here on, you can choose to work on a number of milestones, in **whatever order** you want.',
+        'However, there is so much to learn! From here on, you can choose to work on a number of **OPTIONAL** milestones, in **whatever order** you want.',
         'So you could do `/done 14` and then `/done 10` if you wanted.',
         'Simply pick milestones that teach some skills you find useful. Everything >10 are delightfull side quests.',
         '',
-        '**Can you solve all sidequests (milestones >10) before finishing 10?**',
+        '*It is unlikely that you manage to finish all sidequests in a day, they are only if you really want to dig deep.*',
         '',
         '**Task**: Revise the preregistration together', 
         '* Use issues to **assign tasks**.', 
@@ -240,7 +243,7 @@ module.exports = async function ({ github, context, core, env }) {
         issue_number: context.issue.number,
         body: completionBodyLines.join('\n')
     });
-
+    
     const body11 = [
         '**Task**: Execute code in the cloud',
         '',
@@ -265,11 +268,110 @@ module.exports = async function ({ github, context, core, env }) {
         'Now, a new symbol appeared in the left icon line (the arrow). Click on it and start a live sharing session! One user shares their session, the other joins. This way you can code live together. However, remember it is basically as if you are sitting at the same computer so all git actions etc. will be on behalf of whoever shares their session.'
     ]
     
-
+    
     await github.rest.issues.createComment({
         owner: context.repo.owner,
         repo: context.repo.repo,
         issue_number: context.issue.number,
         body: body11.join('\n')
+    });
+    
+    const body12 = [
+        '',
+        '### Task: Create private repositories (🟢 Easy)',
+        '',
+        '**Why this matters:**',
+        'Some things are not ready (yet) for the public, for example, a paper draft before preprinting. How can we use GitHub in private?',
+        '',
+        '### Detailed Steps:',
+        '',
+        '**Step 1: Create a PRIVATE repository**',
+        '1. Go to [github.com](https://github.com) and click the green **"New"** button',
+        '   - Or use the **"+"** icon in the top right corner, then select "New repository"',
+        '   - Or go to <github.com/new>',
+        '2. Repository name: `private`',
+        '3. **Important:** Select **Private** visibility (lock icon)',
+        '4. Check the box "Add a README file"',
+        '5. Click **"Create repository"**',
+        '6. Create a new issue that should remain private. For example:',
+        '```markdown',
+        '# Team Notes on Reviwer Comments',
+        'Reviewer 2 is being dificult again.',
+        'TODO: Fix methodology they complaned about',
+        '```',
+        '',
+        '**Step 2: Test visibility with your partner**',
+        '1. Share your GitHub username with your partner',
+        '2. **Partner searches for your PRIVATE repo:**',
+        '   - Type: `user:PARTNER_USERNAME private`',
+        '   - Press Enter - this PRIVATE repo should NOT appear',
+        '',
+        '**Expected results:**',
+        '- Private repository: hidden from non-collaborators',
+        '',
+        '**Discussion:** When would you use private vs public repos in your research?',
+        '',
+        '**When done:** Comment `/done 12` or try the hard version of this milestone.',
+        '',
+        '### Task: Create semi-private repositories (🔴 Super Hard)',
+        '',
+        '**Why this matters:**',
+        'Sometimes we publish things, while still working on it, for example we publish a preprint, and then get reviews back. Perhaps you want to keep your discussion among collaborators secret but still maintain a properly versioned public GitHub repo.',
+        '',
+        '### Detailed Steps:',
+        '',
+        'To accomplish this, we create a public repo that mirrors our private repo. From time to time we sync up both versions.',
+        '',
+        '**Step 1: Create a PUBLIC repository**',
+        '1. Go to [github.com](https://github.com) and click the green **"New"** button',
+        '   - Or use the **"+"** icon in the top right corner, then select "New repository"',
+        '   - Or go to <github.com/new>',
+        '2. Repository name: `public`',
+        '3. **Important:** Do not click any of the boxes, we need a fully empty repo.',
+        '4. Leave visibility as "Public"',
+        '5. Click **"Create repository"**',
+        '',
+        '**Step 2: Link your public repository**',
+        '',
+        '1. Go to your private repository.',
+        '2. Open a Codespace (as learned in Milestone 11) or do it locally.',
+        '3. Open a terminal `Terminal` → `New Terminal`',
+        '4. Add your public repo as a remote:',
+        '```bash',
+        'git remote add public https://github.com/YOURUSERNAME/public.git',
+        '```',
+        '5. Verify it worked:',
+        '```bash',
+        'git remote -v',
+        '```',
+        '6. You should see both "origin" (private) and "public" (public) listed',
+        '',
+        '**Step 3: Authenticate to push to another repo**',
+        '',
+        '```bash',
+        'unset GITHUB_TOKEN',
+        'gh auth login --scopes repo --git-protocol https --web --hostname github.com',
+        '```',
+        'Then:',
+        '```bash',
+        'gh auth setup-git',
+        '```',
+        '',
+        '**Step 4: Push to the public repo**',
+        '',
+        '```bash',
+        'git push public main',
+        '```',
+        '',
+        'Now all the content from private is public but your PR and Issue discussion remain private. Therefore anything you want to keep private needs to remain in an Issue or PR.',
+        'Importantly, if you ever commit some content in git even if you change it later, those private things can be resurfaced.',
+        'One option for that is to use `git merge --squash` for the public branch/repo that hides all intermediate changes but we won\'t go into more detail. Feel free to ask, though!'
+    ];
+    
+    await github.rest.issues.createComment({
+        owner: context.repo.owner,
+        repo: context.repo.repo,
+        issue_number: context.issue.number,
+        body: body12.join('\n')
     });
 }

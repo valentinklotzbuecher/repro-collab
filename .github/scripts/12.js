@@ -1,23 +1,23 @@
 module.exports = async function ({ github, context, core, env }) {
     
-    const updatedBody11 = context.payload.issue.body
-    .replace(/^(\s*-\s*\[)\s\](\s*11\..*)$/m, '$1x]$2');
+    const updatedBody12 = context.payload.issue.body
+    .replace(/^(\s*-\s*\[)\s\](\s*12\..*)$/m, '$1x]$2');
     
     await github.rest.issues.update({
         owner: context.repo.owner,
         repo: context.repo.repo,
         issue_number: context.issue.number,
-        body: updatedBody11,
+        body: updatedBody12,
         state: 'open'
     });
     
     // Simple completion message
-    const milestone11BodyLines = [
-        '✅ **Milestone 11 complete!**',
+    const milestone12BodyLines = [
+        '✅ **Milestone 12 complete!**',
         '',
-        'You now understand how to create and use GitHub Codespaces',
+        'You now understand how to manage private/public repository workflows for professional review processes.',
         '',
-        '**Key insight:** You can use a terminal in the browser! This will be handy for the following milestones.',
+        '**Key insight:** Separate internal discussions from public-facing content.',
         '',
         '*To be honest with you, we can\'t automatically check this milestone, so we trust you that you have done it.*'
     ];
@@ -25,6 +25,6 @@ module.exports = async function ({ github, context, core, env }) {
         owner: context.repo.owner,
         repo: context.repo.repo,
         issue_number: context.issue.number,
-        body: milestone11BodyLines.join('\n')
+        body: milestone12BodyLines.join('\n')
     });
 }
