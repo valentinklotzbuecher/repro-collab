@@ -27,7 +27,7 @@ module.exports = async function ({ github, context, core, env }) {
     });
     return '-1';
   }
-
+  console.log(`Milestone ${num}`);
   // 5) OK—return it
   return String(num);
 };
