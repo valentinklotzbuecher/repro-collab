@@ -32,7 +32,7 @@ module.exports = async function ({ github, context, core, env }) {
     await github.rest.issues.create({
         owner: owner,
         repo: repo,
-        title: '[optional] Milestone 13: Work with people who don\'t use Git/GitHub',
+        title: '[optional] Milestone 13: Work with people who don\'t use Git/GitHub - 🟡 Medium',
         body: body13.join('\n'),
         labels: ['enhancement']
     });

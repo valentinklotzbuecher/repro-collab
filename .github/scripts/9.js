@@ -136,7 +136,8 @@ module.exports = async function ({ github, context, core, env }) {
     .replace(/^(\s*-\s*\[)\s\](\s*9\..*)$/m, '$1x]$2')
     + '\n- [ ] 10. Collaborate on issues  - 🔴 Hard' + 
     '\n- [ ] 11. Learn about GitHub Codespaces - 🟡 Medium' +
-    '\n- [ ] 12. Create private and public repositories - 🟢 Easy/ 🔴 Hard';
+    '\n- [ ] 12. Create private and public repositories - 🟢 Easy/ 🔴 Hard' +
+    '\n- [ ] 13. Work with people who don\'t use Git/GitHub - 🟡 Medium';
     
     await github.rest.issues.update({
         owner: context.repo.owner,
