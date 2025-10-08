@@ -91,7 +91,7 @@ module.exports = async function ({ github, context, core, env }) {
         '',
         'Now all the content from private is public but your PR and Issue discussion remain private. Therefore anything you want to keep private needs to remain in an Issue or PR.',
         'Importantly, if you ever commit some content in git even if you change it later, those private things can be resurfaced.',
-        'One option for that is to use `git merge --squash` for the public branch/repo that hides all intermediate changes but we won\'t go into more detail. Feel free to ask, though!'
+        'One option for that is to use `git merge --squash` for the public branch/repo that hides all intermediate changes but we won\'t go into more detail. Feel free to ask, though!',
         `**When done:** Comment \`/done 12\` [in the tracking issue](${trackingIssueUrl}).`,
     ];
     
