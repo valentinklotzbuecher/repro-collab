@@ -50,7 +50,6 @@ module.exports = async function ({ github, context, core, env }) {
             `- Missing space after \`/done\` (e.g., \`/done3\`)\n` +
             `- Additional text after the number (e.g., \`/done 3 now\`)\n` +
             `- Using backslashes instead of forward slash (e.g., \`\\done 3\`)\n\n` +
-            `**Correct examples:** \`/done 3\`, \` /done 3\` (leading/trailing spaces are OK)\n\n` +
             `Please comment again with the correct format.`
     });
   }
