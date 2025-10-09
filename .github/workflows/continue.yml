@@ -57,7 +57,7 @@ jobs:
             const run = require(`./.github/scripts/${scriptName}.js`);
             return await run({ github, context, core, env: process.env });
       
-      - name: Prep milestones 10-16
+      - name: Prep milestones 10-17
         if: steps.parse.outputs.result == '9' && steps.milestone.outputs.validated == 'true'
         uses: actions/github-script@v7
         env:
@@ -65,8 +65,8 @@ jobs:
         with:
           github-token: ${{ secrets.GH_PAT_CROSSREPO }}
           script: |
-            // Run prep scripts for milestones 10-16
-            for (let milestone = 10; milestone <= 16; milestone++) {
+            // Run prep scripts for milestones 10-17
+            for (let milestone = 10; milestone <= 17; milestone++) {
               const scriptName = `${milestone}prep`;
               console.log(`Running ${scriptName}.js...`);
               const run = require(`./.github/scripts/${scriptName}.js`);
@@ -80,7 +80,8 @@ jobs:
             '\n- [ ] 13. Work with people who don\'t use Git/GitHub - 🟡 Medium' +
             '\n- [ ] 14. Use GitHub Projects, Labels, and Assignments - 🟡 Medium' +
             '\n- [ ] 15. Learn Git Branching Interactively - 🟢 Easy / 🟡 Medium / 🔴 Hard' +
-            '\n- [ ] 16. Time Travel in Git - View and Restore History - 🟢 Easy / 🟡 Medium';
+            '\n- [ ] 16. Time Travel in Git - View and Restore History - 🟢 Easy / 🟡 Medium' +
+            '\n- [ ] 17. Force Complete File Review - 🟡 Medium';
 
             await github.rest.issues.update({
                 owner: context.repo.owner,
