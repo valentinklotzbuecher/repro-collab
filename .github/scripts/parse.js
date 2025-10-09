@@ -16,26 +16,27 @@ module.exports = async function ({ github, context, core, env }) {
   // First try exact match with trim (handles trailing/leading whitespace gracefully)
   const trimmedCmd = cmd.trim();
   const strictMatch = /^\/done\s+(\d+)$/.exec(trimmedCmd);
-  
+
   // If strict parsing succeeds, use it
   if (strictMatch) {
     const num = parseInt(strictMatch[1], 10);
-    
-    // 4) Validate range
-    if (!nums.includes(num)) {
+
+    // 4) Validate range (must be >= 3 and in the list)
+    if (num < 3 || !nums.includes(num)) {
       await github.rest.issues.createComment({
         owner: context.repo.owner,
         repo:  context.repo.repo,
         issue_number: context.issue.number,
-        body: `🚫 Invalid milestone number. Please pick a number between 1 and ${max}.`
+        body: `🚫 Invalid milestone number. Please pick a number between 3 and ${max}.`
       });
       return '-1';
     }
-    
+
+    console.log(`Milestone ${num}`);
     // 5) OK—return it
     return String(num);
   }
-  
+
   // If strict parsing fails, check if "done" appears in the comment
   if (/done/i.test(cmd)) {
     // User tried to use /done but with incorrect format
@@ -44,7 +45,7 @@ module.exports = async function ({ github, context, core, env }) {
       repo:  context.repo.repo,
       issue_number: context.issue.number,
       body: `⚠️ Your comment contains "done" but doesn't match the required format.\n\n` +
-            `**Required format:** \`/done N\` where N is the milestone number\n\n` +
+            `**Required format:** \`/done N\` where N is the milestone number (3 or higher)\n\n` +
             `**Common mistakes to avoid:**\n` +
             `- Extra text before the command (e.g., \`I am /done 3\`)\n` +
             `- Missing space after \`/done\` (e.g., \`/done3\`)\n` +
