@@ -83,7 +83,7 @@ module.exports = async function ({ github, context, core, env }) {
         '',
         `**Task:** Milestone 7 - 🟡 Medium is now available. Time to merge your pull request: ${pr.html_url}`,
         '',
-        'Click the "Merge pull request" button to complete the PR workflow.',
+        'Click the "Merge pull request" button and then "Confirm merge" to complete the PR workflow.',
         '',
         `**Afterwards**: comment \`/done 7\` here.`
     ];
