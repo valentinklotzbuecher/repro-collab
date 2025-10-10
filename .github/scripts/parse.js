@@ -13,8 +13,12 @@ module.exports = async function ({ github, context, core, env }) {
 
   // 3) Parse the /done M command
   const cmd = (context.payload.comment.body || '');
-  // First try exact match with trim (handles trailing/leading whitespace gracefully)
   const trimmedCmd = cmd.trim();
+  
+  // Check if this is a single-line comment (no newlines)
+  const isSingleLine = !trimmedCmd.includes('\n');
+  
+  // First try exact match with trim (handles trailing/leading whitespace gracefully)
   const strictMatch = /^\/done\s+(\d+)$/.exec(trimmedCmd);
 
   // If strict parsing succeeds, use it
@@ -37,8 +41,8 @@ module.exports = async function ({ github, context, core, env }) {
     return String(num);
   }
 
-  // If strict parsing fails, check if "done" appears in the comment
-  if (/done/i.test(cmd)) {
+  // Only provide format hint if it's a single-line comment containing "done"
+  if (isSingleLine && /done/i.test(cmd)) {
     // User tried to use /done but with incorrect format
     await github.rest.issues.createComment({
       owner: context.repo.owner,
