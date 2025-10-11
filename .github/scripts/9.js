@@ -24,7 +24,7 @@ module.exports = async function ({ github, context, core, env }) {
         await github.rest.issues.createComment({
             owner, repo,
             issue_number: dataGenIssue.number,
-            body: '✅ This issue has been automatically closed as Milestone 9 is being completed.'
+            body: '✅ This issue has been automatically closed.\n\nMilestone 9 is being completed.'
         });
         
         console.log(`Automatically closed data generation issue #${dataGenIssue.number}`);
@@ -123,18 +123,25 @@ module.exports = async function ({ github, context, core, env }) {
             owner: context.repo.owner,
             repo: context.repo.repo,
             issue_number: context.issue.number,
-            body: '🚫 Milestone 9 not complete. Create a "data" folder and upload at least 2 data files from the Shiny app from two different people. Then run `/done 9` again.'
+            body: '🚫 Milestone 9 not complete.\n\nCreate a "data" folder and upload at least 2 data files from the Shiny app from two different people. Then run `/done 9` again.'
         });
         return;
     }
     core.setOutput('validated', 'true');
 
     // ✅ Milestone 9 successful - now automatically trigger Milestone 10
-    
-    // Update main issue - mark both 9 and 10 complete
-    const updatedBody = context.payload.issue.body
-    .replace(/^(\s*-\s*\[)\s\](\s*9\..*)$/m, '$1x]$2')
-    
+
+    // Fetch the latest issue body to avoid stale data
+    const { data: currentIssue } = await github.rest.issues.get({
+        owner: context.repo.owner,
+        repo: context.repo.repo,
+        issue_number: context.issue.number
+    });
+
+    // Update main issue - mark milestone 9 complete
+    const updatedBody = currentIssue.body
+    .replace(/^(\s*-\s*\[)\s\](\s*9\..*)$/m, '$1x]$2');
+
     await github.rest.issues.update({
         owner: context.repo.owner,
         repo: context.repo.repo,

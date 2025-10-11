@@ -19,7 +19,7 @@ module.exports = async function ({ github, context, core, env }) {
             owner: context.repo.owner,
             repo: context.repo.repo,
             issue_number: context.issue.number,
-            body: '🚫 Could not find the PR. Please check your fork for the preregistration PR.'
+            body: '🚫 Could not find the PR.\n\nPlease check your fork for the preregistration PR.'
         });
         return;
     }
