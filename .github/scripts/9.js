@@ -24,7 +24,7 @@ module.exports = async function ({ github, context, core, env }) {
         await github.rest.issues.createComment({
             owner, repo,
             issue_number: dataGenIssue.number,
-            body: '✅ This issue has been automatically closed as Milestone 9 is being completed.'
+            body: '✅ This issue has been automatically closed.\n\nMilestone 9 is being completed.'
         });
         
         console.log(`Automatically closed data generation issue #${dataGenIssue.number}`);
@@ -123,7 +123,7 @@ module.exports = async function ({ github, context, core, env }) {
             owner: context.repo.owner,
             repo: context.repo.repo,
             issue_number: context.issue.number,
-            body: '🚫 Milestone 9 not complete. Create a "data" folder and upload at least 2 data files from the Shiny app from two different people. Then run `/done 9` again.'
+            body: '🚫 Milestone 9 not complete.\n\nCreate a "data" folder and upload at least 2 data files from the Shiny app from two different people. Then run `/done 9` again.'
         });
         return;
     }

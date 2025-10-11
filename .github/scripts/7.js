@@ -32,7 +32,7 @@ module.exports = async function ({ github, context, core, env }) {
             owner: context.repo.owner,
             repo: context.repo.repo,
             issue_number: context.issue.number,
-            body: `🚫 Milestone 7 not complete. Please merge or close the pull request: ${prUrl}. Make sure all checks have passed, then click "Merge pull request" and run \`/done 7\` again.`
+            body: `🚫 Milestone 7 not complete.\n Please merge or close the pull request: ${prUrl}. Make sure all checks have passed, then click "Merge pull request" and run \`/done 7\` again.`
         });
         return;
     }

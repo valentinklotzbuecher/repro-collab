@@ -10,7 +10,7 @@ module.exports = async function ({ github, context, core, env }) {
             owner: context.repo.owner,
             repo: context.repo.repo,
             issue_number: context.issue.number,
-            body: '🚫 Milestone 3 not complete. Please enable Issues on your fork, then `/done 3` again.'
+            body: '🚫 Milestone 3 not complete.\n\nPlease enable Issues on your fork, then `/done 3` again.'
         });
     } else {
         // 1) Cross off milestone 3 in the upstream issue body
