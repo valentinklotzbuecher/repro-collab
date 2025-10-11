@@ -62,11 +62,11 @@ module.exports = async function ({ github, context, core, env }) {
             '- Go to the **Issues** tab.', 
             '- Click **New Issue**.', 
             '- Use this exact title: **Preregistration needed**', 
-            `
-                \`\`\`
-                Preregistration needed
-                \`\`\`
-                `,
+            '',
+            '```',
+            'Preregistration needed',
+            '```',
+            '',
             '- Add a brief introduction about yourself, what brings you to this workshop and what you\'re hoping to learn. Make sure to try different Markdown formatting options!', 
             '', 
             `**Afterwards:** Return to this issues and comment \`/done 4\` here: ${preregistrationUrl}`,
